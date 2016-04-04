@@ -4,17 +4,17 @@ USING_NS_CC;
 
 Scene* HelloWorld::createScene()
 {
-    // 'scene' is an autorelease object
-    auto scene = Scene::create();
-    
-    // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
+	// 'scene' is an autorelease object
+	auto scene = Scene::create();
 
-    // add layer as a child to scene
-    scene->addChild(layer);
+	// 'layer' is an autorelease object
+	auto layer = HelloWorld::create();
 
-    // return the scene
-    return scene;
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+	// return the scene
+	return scene;
 }
 
 // on "init" you need to initialize your instance
@@ -30,62 +30,55 @@ bool HelloWorld::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	//   // 正方形
-	//auto rect = DrawNode::create();
-	//rect->drawRect(Vec2(0, 0), Vec2(150, 150), Color4F(1, 0, 0, 1));
-	//rect->setPosition(visibleSize / 2);
-	//rect->setContentSize(Size(150, 150));
-	//rect->setAnchorPoint(Vec2(0.5, 0.5));
+	//auto logo = Sprite::create("logo.png");
+	auto img = Director::getInstance()->getTextureCache()->addImage("logo.png");
+	auto logoSize = img->getContentSize();
+	CCLOG("logo size:%f %f", logoSize.width, logoSize.height);
+	auto logo = Sprite::createWithTexture(img);
+	logo->setPosition(visibleSize * 4 / 5);
 
-	//// 点
-	//auto dot = DrawNode::create();
-	//dot->drawDot(Vec2(0, 0),10,Color4F(1,1,1,1));
+	// 创建图层
+	auto layer1 = Layer::create();
+	auto layer2 = Layer::create();
+	auto layer3 = Layer::create();
 
-	//schedule([rect, dot](float f){
-	//	rect->setRotation(rect->getRotation() + 1);
-	//	auto p = dot->convertToWorldSpace(Vec2(0, 0));
-	//	CCLOG("%f,%f", p.x, p.y);
-	//}, "Test");
+	// 创建精灵
+	auto sprite1 = Sprite::create("red.png");
+	auto sprite2 = Sprite::create("green.png");
+	auto sprite3 = Sprite::create("blue.png");
+	sprite1->setAnchorPoint(Vec2(0, 0));
+	sprite2->setAnchorPoint(Vec2(0, 0));
+	sprite3->setAnchorPoint(Vec2(0, 0));
 
-	//rect->addChild(dot);
-	//addChild(rect);
+	// 添加精灵到图层
+	layer1->addChild(sprite1);
+	layer2->addChild(sprite2);
+	layer3->addChild(sprite3);
 
+	// 设置图层的位置
+	layer1->setPosition(Vec2(10, 10));
+	layer2->setPosition(Vec2(30, 30));
+	layer3->setPosition(Vec2(50, 50));
 
-	//auto dot = DrawNode::create();
-	//dot->drawDot(Vec2(0, 0), 10, Color4F(1, 1, 1, 1));
-	//dot->setPosition(visibleSize / 2);
-	//addChild(dot);
+	// 添加图层到当前图层
+	addChild(layer1);
+	addChild(layer2);
+	addChild(layer3);
+	addChild(logo);
 
-	//_angle = 0;
-	//schedule([dot,visibleSize,this](float f) {
-	//	dot->setPositionY(visibleSize.height/2+cos(_angle) * 100);
-	//	dot->setPositionX(visibleSize.width / 2 + sin(_angle) * 60);
-	//	_angle+=0.1;
-	//}, "Test");
-
-	_direction.set(random(-1, 1), random(-1, 1));
-	_direction.normalize();
-
-	auto dot = DrawNode::create();
-	dot->drawDot(Vec2(10, 10), 10, Color4F(1, 1, 1, 1));
-	dot->setContentSize(Size(20, 20));
-	dot->setAnchorPoint(Vec2(0.5, 0.5));
-	dot->setPosition(visibleSize / 2);
-	addChild(dot);
-
-	schedule([dot, visibleSize, this](float f) {
-		auto p = dot->getPosition();
-		if (p.x<10 || p.x>visibleSize.width - 10)
-		{
-			_direction.x *= -1;
-		}
-		else if (p.y<10 || p.y>visibleSize.height - 10)
-		{
-			_direction.y *= -1;
-		}
-		dot->setPosition(p + _direction);
-
-	}, "Test");
+	// 切换场景
+	scheduleOnce([visibleSize](float f){
+		auto scene2 = Scene::create();
+		auto scene2Layer = Layer::create();
+		scene2->addChild(scene2Layer);
+		auto scene2Sprite1 = Sprite::create("jiangshi.png");
+		scene2Sprite1->setPosition(Vec2(visibleSize.width / 4, visibleSize.height / 2));
+		scene2Layer->addChild(scene2Sprite1);
+		auto scene2Sprite2 = Sprite::create("plant.png");
+		scene2Sprite2->setPosition(Vec2(visibleSize.width * 3 / 4, visibleSize.height / 2));
+		scene2Layer->addChild(scene2Sprite2);
+		Director::getInstance()->replaceScene(scene2);
+	}, 3, "Test");
 
 	return true;
 }
@@ -93,9 +86,9 @@ bool HelloWorld::init()
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-    Director::getInstance()->end();
+	Director::getInstance()->end();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
+	exit(0);
 #endif
 }
