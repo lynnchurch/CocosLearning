@@ -30,62 +30,22 @@ bool HelloWorld::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	//   // 正方形
-	//auto rect = DrawNode::create();
-	//rect->drawRect(Vec2(0, 0), Vec2(150, 150), Color4F(1, 0, 0, 1));
-	//rect->setPosition(visibleSize / 2);
-	//rect->setContentSize(Size(150, 150));
-	//rect->setAnchorPoint(Vec2(0.5, 0.5));
+	auto zombie = NodeGrid::create();
+	zombie->addChild(Sprite::create("zombie.png"));
+	zombie->setPosition(visibleSize / 2);
+	addChild(zombie);
+	//zombie->runAction(Shaky3D::create(30, Size(2, 2), 2, false)); // 震动
+	//zombie->runAction(ShakyTiles3D::create(30, Size(50, 50), 2, false)); // 瓦片碎裂震动
+	//zombie->runAction(ShuffleTiles::create(5, Size(100, 100), 5)); // 爆炸
 
-	//// 点
-	//auto dot = DrawNode::create();
-	//dot->drawDot(Vec2(0, 0),10,Color4F(1,1,1,1));
-
-	//schedule([rect, dot](float f){
-	//	rect->setRotation(rect->getRotation() + 1);
-	//	auto p = dot->convertToWorldSpace(Vec2(0, 0));
-	//	CCLOG("%f,%f", p.x, p.y);
-	//}, "Test");
-
-	//rect->addChild(dot);
-	//addChild(rect);
-
-
-	//auto dot = DrawNode::create();
-	//dot->drawDot(Vec2(0, 0), 10, Color4F(1, 1, 1, 1));
-	//dot->setPosition(visibleSize / 2);
-	//addChild(dot);
-
-	//_angle = 0;
-	//schedule([dot,visibleSize,this](float f) {
-	//	dot->setPositionY(visibleSize.height/2+cos(_angle) * 100);
-	//	dot->setPositionX(visibleSize.width / 2 + sin(_angle) * 60);
-	//	_angle+=0.1;
-	//}, "Test");
-
-	_direction.set(random(-1, 1), random(-1, 1));
-	_direction.normalize();
-
-	auto dot = DrawNode::create();
-	dot->drawDot(Vec2(10, 10), 10, Color4F(1, 1, 1, 1));
-	dot->setContentSize(Size(20, 20));
-	dot->setAnchorPoint(Vec2(0.5, 0.5));
-	dot->setPosition(visibleSize / 2);
-	addChild(dot);
-
-	schedule([dot, visibleSize, this](float f) {
-		auto p = dot->getPosition();
-		if (p.x<10 || p.x>visibleSize.width - 10)
-		{
-			_direction.x *= -1;
-		}
-		else if (p.y<10 || p.y>visibleSize.height - 10)
-		{
-			_direction.y *= -1;
-		}
-		dot->setPosition(p + _direction);
-
-	}, "Test");
+	// 震动后爆炸
+	/*auto shaky = Shaky3D::create(0.5, Size(1, 1), 2,false);
+	auto shuffleTiles = ShuffleTiles::create(2, Size(100, 100), 25);
+	zombie->runAction(Sequence::create(shaky, shuffleTiles, NULL));*/
+	//zombie->runAction(TurnOffTiles::create(1, Size(150, 150))); // 碎片消失
+	auto waves1 = Waves3D::create(5, Size(20, 20), 5, 20); // 波浪效果
+	auto waves2 = Waves3D::create(1, Size(2, 2), 10, 0);
+	zombie->runAction(Sequence::create(waves1,waves2,NULL));
 
 	return true;
 }
