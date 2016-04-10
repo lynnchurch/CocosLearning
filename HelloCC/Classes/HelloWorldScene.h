@@ -5,6 +5,11 @@
 
 class HelloWorld : public cocos2d::Layer
 {
+private:
+	cocos2d::TextFieldTTF *tf;
+	cocos2d::Label *btn;
+	cocos2d::Size visibleSize;
+
 protected:
 	float _angle;
 	cocos2d::Vec2 _direction;
@@ -19,6 +24,8 @@ public:
 
 	// implement the "static create()" method manually
 	CREATE_FUNC(HelloWorld);
+	void buildUI();
+	void addListeners();
 };
 
 #endif // __HELLOWORLD_SCENE_H__
