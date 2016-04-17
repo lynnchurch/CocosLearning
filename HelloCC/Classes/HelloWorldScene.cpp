@@ -52,6 +52,17 @@ bool HelloWorld::init()
 
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyReleased = [](EventKeyboard::KeyCode code, Event *e)
+	{
+		CCLOG("Keycode: %d", code);
+		if (EventKeyboard::KeyCode::KEY_ESCAPE== code)
+		{
+			Director::getInstance()->end();
+		}
+	};
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+
 	return true;
 }
 
