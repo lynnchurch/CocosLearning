@@ -1,7 +1,13 @@
 # CocosLearning
 Some practice about cocos learning.
 
-# NOTES
+# TiledMapEditor
+https://thorbjorn.itch.io/tiled
+
+# ParticleEditor
+http://onebyonedesign.com/flash/particleeditor/
+
+# Notes
 ## 安卓调试日志输出
 华为系列手机默认是关闭了日志输出的，需要人工打开。方法如下：
 进入拨号界面输入：*#*#2846579#*#*
